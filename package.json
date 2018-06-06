@@ -1,0 +1,8 @@
+{
+  "name": "api-cli",
+  "version": "0.1.0",
+  "description": "api cli tool",
+  "main": "index.js",
+  "author": "common",
+  "license": "MIT"
+}
