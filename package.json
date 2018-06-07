@@ -4,5 +4,11 @@
   "description": "api cli tool",
   "main": "index.js",
   "author": "common",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "inquirer": "^6.0.0",
+    "request": "^2.87.0"
+  }
 }
