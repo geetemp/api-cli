@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+const program = require("commander");
+const request = require("request");
+const chalk = require("chalk");
+const logger = require("../lib/logger");
+const config = require("../config.js");
+const db = require("../lib/dbinit");
+
+program
+  .command("list")
+  .option("-u, --url [url]", "interface req url")
+  .option("-m, --method [method]", "interface req method")
+  .description("search interface list")
+  .action(function(cmd) {
+    const workProject = db.get("workProject").value();
+    if (!workProject)
+      logger.fatal("current work project isn't setted, please go to set.");
+
+    const { url, method } = cmd;
+    console.log(url, method);
+  });
+
+program.parse(process.argv);

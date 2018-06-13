@@ -2,8 +2,11 @@
 const program = require("commander");
 const request = require("request");
 const chalk = require("chalk");
+const logger = require("../lib/logger");
 const config = require("../config.js");
+const db = require("../lib/dbinit");
 
+// 查找项目
 program
   .command("list [project-name]")
   .description("display project list")
@@ -13,15 +16,31 @@ program
       : `${config.host}/projects`;
     request(url, function(error, response, body) {
       if (error) {
-        chalk.red(error);
+        logger.fatal(error);
       }
       if (!error && response.statusCode === 200) {
         body = JSON.parse(body);
-        console.info(body.data);
+        //如果是查询所有项目,存储他们，作为后面命名检查使用
+        if (url.indexOf("identity") === -1) {
+          storeAllProject(body.data);
+        }
+        logger.success(body.data);
       }
     });
   });
 
+/**
+ * 存储所有被代理项目
+ */
+function storeAllProject(projects) {
+  const projectIdentities = [];
+  for (const project of projects) {
+    projectIdentities.push(project.identity);
+  }
+  db.set("projects", projectIdentities).write();
+}
+
+// 添加项目
 program
   .command("add <project-name> <host>")
   .description("add a project")
@@ -35,16 +54,17 @@ program
       },
       function(error, response, body) {
         if (error) {
-          chalk.red(error);
+          logger.fatal(error);
         }
         if (!error && response.statusCode === 200) {
           body = JSON.parse(body);
-          console.info(body.data);
+          logger.success(body.data);
         }
       }
     );
   });
 
+// 修改项目信息
 program
   .command("set <project-name>")
   .description("set product info")
@@ -61,14 +81,44 @@ program
       },
       function(error, response, body) {
         if (error) {
-          chalk.red(error);
+          logger.fatal(error);
         }
         if (!error && response.statusCode === 200) {
           body = JSON.parse(body);
-          console.info(body.data);
+          logger.success(body.data);
         }
       }
     );
+  });
+
+// 设置使用某个项目
+program
+  .command("use <project-name>")
+  .description("use someone project")
+  .action(function(projectName) {
+    const allProjects = db.get("projects").value();
+    if (
+      allProjects &&
+      allProjects.length &&
+      allProjects.indexOf(projectName) === -1
+    ) {
+      logger.fatal(
+        "used project %s doesn't exist.existing projects:%j",
+        projectName,
+        allProjects
+      );
+      return;
+    }
+    db.set("workProject", projectName).write();
+    logger.success("used project success.current work project:%s", projectName);
+  });
+
+// 显示当前工作项目
+program
+  .command("work")
+  .description("show work project")
+  .action(function() {
+    logger.success("current work project:%s", db.get("workProject").value());
   });
 
 program.parse(process.argv);
