@@ -4,4 +4,5 @@ require("commander")
   .usage("<command> [options]")
   .command("project", "query and set project info")
   .command("interface", "query and set interface info")
+  .command("result", "query and set interface info")
   .parse(process.argv);
