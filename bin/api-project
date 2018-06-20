@@ -3,8 +3,10 @@ const program = require("commander");
 const request = require("request");
 const chalk = require("chalk");
 const logger = require("../lib/logger");
-const config = require("../config.js");
+const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
+
+const serverHost = setting.serverHost();
 
 // 查找项目
 program
@@ -12,8 +14,8 @@ program
   .description("display project list")
   .action(function(projectName) {
     const url = projectName
-      ? `${config.host}/projects?identity=${projectName}`
-      : `${config.host}/projects`;
+      ? `${serverHost}/projects?identity=${projectName}`
+      : `${serverHost}/projects`;
     request(url, function(error, response, body) {
       if (error) {
         logger.fatal(error);
@@ -48,7 +50,7 @@ program
   .action(function(projectName, host, cmd) {
     request(
       {
-        url: `${config.host}/projects`,
+        url: `${serverHost}/projects`,
         method: "POST",
         form: { identity: projectName, name: cmd.name, target: host }
       },
@@ -75,7 +77,7 @@ program
     const { name, host, status } = cmd;
     request(
       {
-        url: `${config.host}/projects`,
+        url: `${serverHost}/projects`,
         method: "PUT",
         form: { identity: projectName, name, host, status }
       },

@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const program = require("commander");
+const db = require("../lib/dbinit");
+
+program.usage("<server-host>");
+
+function help() {
+  program.parse(process.argv);
+  if (program.args.length < 1) return program.help();
+}
+help();
+
+const host = program.args[0];
+db.set("serverHost", host).write();

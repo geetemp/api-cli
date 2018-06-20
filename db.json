@@ -8,6 +8,8 @@
   "projects": [
     "gp",
     "career",
-    "huip"
-  ]
+    "huip",
+    "huig"
+  ],
+  "serverHost": "http://localhost:3001"
 }

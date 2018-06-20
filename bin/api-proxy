@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 const express = require("express");
 const proxy = require("http-proxy-middleware");
-const config = require("../config.js");
 const jsondiffpatch = require("jsondiffpatch");
 const chalk = require("chalk");
+const setting = require("../lib/setting");
 const app = express();
+const serverHost = setting.serverHost();
 
 app.use(
   proxy({
-    target: `${config.host}`,
+    target: `${serverHost}`,
     changeOrigin: true,
     onProxyRes: function(proxyRes, req, res) {
       const diff = proxyRes.headers["diff"];

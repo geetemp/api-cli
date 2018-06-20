@@ -3,9 +3,10 @@ const program = require("commander");
 const request = require("request");
 const chalk = require("chalk");
 const logger = require("../lib/logger");
-const config = require("../config.js");
+const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
 const jsondiffpatch = require("jsondiffpatch");
+const serverHost = setting.serverHost();
 
 program
   .command("list <url> <method> <code>")
@@ -16,7 +17,7 @@ program
       logger.fatal("current work project isn't setted, please go to set.");
     request(
       {
-        url: `${config.host}/apis/stack`,
+        url: `${serverHost}/apis/stack`,
         qs: {
           workProject,
           url,
@@ -48,7 +49,7 @@ program
     const { desc, set } = cmd;
     request(
       {
-        url: `${config.host}/apis/stack/head`,
+        url: `${serverHost}/apis/stack/head`,
         qs: {
           workProject,
           url,
@@ -82,7 +83,7 @@ program
     const { desc, set } = cmd;
     request(
       {
-        url: `${config.host}/apis/stack/stable`,
+        url: `${serverHost}/apis/stack/stable`,
         qs: {
           workProject,
           url,
@@ -110,7 +111,7 @@ program
   .action(function(resultHash) {
     request(
       {
-        url: `${config.host}/apis/stack/${resultHash}`
+        url: `${serverHost}/apis/stack/${resultHash}`
       },
       function(error, response, body) {
         if (error) {
@@ -131,7 +132,7 @@ program
     console.log(newHash, oldHash);
     request(
       {
-        url: `${config.host}/apis/stack/diff`,
+        url: `${serverHost}/apis/stack/diff`,
         qs: { newHash, oldHash }
       },
       function(error, response, body) {

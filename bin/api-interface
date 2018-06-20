@@ -3,8 +3,10 @@ const program = require("commander");
 const request = require("request");
 const chalk = require("chalk");
 const logger = require("../lib/logger");
-const config = require("../config.js");
+const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
+
+const serverHost = setting.serverHost();
 
 program
   .command("list")
@@ -19,7 +21,7 @@ program
     const { url, method } = cmd;
     request(
       {
-        url: `${config.host}/apis`,
+        url: `${serverHost}/apis`,
         qs: {
           workProject,
           url,
@@ -47,7 +49,7 @@ program
       logger.fatal("current work project isn't setted, please go to set.");
     request(
       {
-        url: `${config.host}/apis/status`,
+        url: `${serverHost}/apis/status`,
         qs: {
           workProject,
           url,
