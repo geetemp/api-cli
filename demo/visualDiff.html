@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type='text/javascript' src="https://cdn.jsdelivr.net/npm/jsondiffpatch/dist/jsondiffpatch.umd.min.js"></script>
+</head>
+
+<body>
+    <div id="visual"></div>
+    <hr/>
+    <div id="annotated"></div>
+    <script>
+        var left = { a: 3, b: 4 };
+        var right = { a: 5, c: 9 };
+        var delta = jsondiffpatch.diff(left, right);
+
+        var output = jsondiffpatch.formatters.html.format(delta, left);
+        console.log(output);
+    </script>
+</body>
+
+</html>
