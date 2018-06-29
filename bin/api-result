@@ -129,7 +129,6 @@ program
   .command("diff <new-hash> <old-hash>")
   .description("Compare the differences between the two results")
   .action(function(newHash, oldHash) {
-    console.log(newHash, oldHash);
     request(
       {
         url: `${serverHost}/apis/stack/diff`,
@@ -140,7 +139,9 @@ program
           logger.fatal(error);
         }
         if (!error && response.statusCode === 200) {
-          jsondiffpatch.console.log(JSON.parse(body));
+          body
+            ? jsondiffpatch.console.log(JSON.parse(body))
+            : logger.success("no diff");
         }
       }
     );

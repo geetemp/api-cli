@@ -6,10 +6,7 @@
     "code": "0"
   },
   "projects": [
-    "gp",
-    "career",
-    "huip",
-    "huig"
+    "gp"
   ],
   "serverHost": "http://localhost:3001"
 }
