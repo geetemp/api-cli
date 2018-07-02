@@ -17,7 +17,6 @@ program
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
-
     const { url, method } = cmd;
     request(
       {
@@ -41,19 +40,27 @@ program
   });
 
 program
-  .command("status <url> <method>")
+  .command("status [url] [method]")
   .description("query interface status")
   .action(function(url, method) {
     const workProject = db.get("workProject").value();
-    if (!workProject)
+    if (!workProject) {
       logger.fatal("current work project isn't setted, please go to set.");
+    }
+    let workInterface = db.get("interface").value();
+    if (url && !method) {
+      logger.fatal("which interface of status is queried ? please specify!");
+    }
+    if (!url && Object.keys(workInterface).length === 0) {
+      logger.fatal("which interface of status is queried ? please specify!");
+    }
     request(
       {
         url: `${serverHost}/apis/status`,
         qs: {
           workProject,
-          url,
-          method
+          url: url || workInterface.url,
+          method: method || workInterface.method
         }
       },
       function(error, response, body) {
@@ -72,12 +79,22 @@ program
   .command("use <url> <method> [code]")
   .description("use someone interface")
   .action(function(url, method, code) {
-    db.set("interface", { url, method, code }).write();
-    logger.success("used interface success.current work interface:%j", {
+    db.set("interface", { url, method, code: code || 0 }).write();
+    logger.success("used interface success. current work interface:%j", {
       url,
       method,
-      code
+      code: code || 0
     });
+  });
+
+program
+  .command("work")
+  .description("use someone interface")
+  .action(function(url, method, code) {
+    const workProject = db.get("workProject").value();
+    let workInterface = db.get("interface").value();
+    workInterface = Object.assign({ project: workProject }, workInterface);
+    logger.success("current work interface:%j", workInterface);
   });
 
 program.parse(process.argv);

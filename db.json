@@ -2,8 +2,8 @@
   "workProject": "gp",
   "interface": {
     "url": "/v3_0/offshore/info",
-    "method": "POST",
-    "code": "0"
+    "method": "GET",
+    "code": 0
   },
   "projects": [
     "gp"

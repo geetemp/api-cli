@@ -9,20 +9,27 @@ const jsondiffpatch = require("jsondiffpatch");
 const serverHost = setting.serverHost();
 
 program
-  .command("list <url> <method> <code>")
+  .command("list [url] [method] [code]")
   .description("list result stack on someone interface")
   .action(function(url, method, code) {
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
+    let workInterface = db.get("interface").value();
+    if ((url && !method) || (url && method && !code)) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
+    if (!url && Object.keys(workInterface).length === 0) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
     request(
       {
         url: `${serverHost}/apis/stack`,
         qs: {
           workProject,
-          url,
-          method,
-          code
+          url: url || workInterface.url,
+          method: method || workInterface.method,
+          code: code || workInterface.code
         }
       },
       function(error, response, body) {
@@ -38,7 +45,7 @@ program
   });
 
 program
-  .command("head <url> <method> <code>")
+  .command("head [url] [method] [code]")
   .option("-d --desc", "require include result desc")
   .option("-s --set <hash>", "set head to a new one")
   .description("get head stack on someone interface")
@@ -46,15 +53,22 @@ program
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
+    let workInterface = db.get("interface").value();
+    if ((url && !method) || (url && method && !code)) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
+    if (!url && Object.keys(workInterface).length === 0) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
     const { desc, set } = cmd;
     request(
       {
         url: `${serverHost}/apis/stack/head`,
         qs: {
           workProject,
-          url,
-          method,
-          code,
+          url: url || workInterface.url,
+          method: method || workInterface.method,
+          code: code || workInterface.code,
           desc,
           set
         }
@@ -72,7 +86,7 @@ program
   });
 
 program
-  .command("stable <url> <method> <code>")
+  .command("stable [url] [method] [code]")
   .option("-d --desc", "require include result desc")
   .option("-s --set <hash>", "set stable to a new one")
   .description("get stable stack on someone interface")
@@ -80,15 +94,22 @@ program
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
+    let workInterface = db.get("interface").value();
+    if ((url && !method) || (url && method && !code)) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
+    if (!url && Object.keys(workInterface).length === 0) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
     const { desc, set } = cmd;
     request(
       {
         url: `${serverHost}/apis/stack/stable`,
         qs: {
           workProject,
-          url,
-          method,
-          code,
+          url: url || workInterface.url,
+          method: method || workInterface.method,
+          code: code || workInterface.code,
           desc,
           set
         }
@@ -126,13 +147,33 @@ program
   });
 
 program
-  .command("diff <new-hash> <old-hash>")
+  .command("diff [new-hash] [old-hash] [code]")
   .description("Compare the differences between the two results")
-  .action(function(newHash, oldHash) {
+  .action(function(newHash, oldHash, code) {
+    if (newHash && !oldHash) {
+      logger.fatal("lack diff must params,please specify!");
+    }
+    if (newHash && oldHash && !code) {
+      if (newHash.indexOf("/") !== -1) {
+        logger.fatal("lack diff must params,please specify!");
+      }
+    }
+    const workProject = db.get("workProject").value();
+    if (!workProject)
+      logger.fatal("current work project isn't setted, please go to set.");
+    let workInterface = db.get("interface").value();
+    if (!newHash && Object.keys(workInterface).length === 0) {
+      logger.fatal("which interface is queried ? please specify!");
+    }
     request(
       {
         url: `${serverHost}/apis/stack/diff`,
-        qs: { newHash, oldHash }
+        qs: {
+          one: newHash || workInterface.url,
+          two: oldHash || workInterface.method,
+          workProject
+          code: code || workInterface.code
+        }
       },
       function(error, response, body) {
         if (error) {
