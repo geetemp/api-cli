@@ -4,12 +4,20 @@ const proxy = require("http-proxy-middleware");
 const jsondiffpatch = require("jsondiffpatch");
 const chalk = require("chalk");
 const setting = require("../lib/setting");
+const program = require("commander");
+const db = require("../lib/dbinit");
+
 const app = express();
-const serverHost = setting.serverHost();
+program.usage("[server-host]").parse(process.argv);
+
+const host = program.args[0];
+if (host) {
+  db.set("serverHost", host).write();
+}
 
 app.use(
   proxy({
-    target: `${serverHost}`,
+    target: host || setting.serverHost(),
     changeOrigin: true,
     onProxyRes: function(proxyRes, req, res) {
       const diff = proxyRes.headers["diff"];
