@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const program = require("commander");
 const request = require("request");
-const chalk = require("chalk");
 const logger = require("../lib/logger");
 const setting = require("../lib/setting");
 const db = require("../lib/dbinit");

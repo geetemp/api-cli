@@ -9,8 +9,9 @@ const serverHost = setting.serverHost();
 
 program
   .command("list [url] [method] [code]")
+  .option("-d --desc", "include result desc")
   .description("list result stack on someone interface")
-  .action(function(url, method, code) {
+  .action(function(url, method, code, cmd) {
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
@@ -21,6 +22,7 @@ program
     if (!url && Object.keys(workInterface).length === 0) {
       logger.fatal("which interface is queried ? please specify!");
     }
+    const { desc } = cmd;
     request(
       {
         url: `${serverHost}/apis/stack`,
@@ -28,7 +30,8 @@ program
           workProject,
           url: url || workInterface.url,
           method: method || workInterface.method,
-          code: code || workInterface.code
+          code: code || workInterface.code,
+          desc
         }
       },
       function(error, response, body) {

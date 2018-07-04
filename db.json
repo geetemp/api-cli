@@ -1,12 +1,12 @@
 {
   "workProject": "gp",
   "interface": {
-    "url": "/v3_0/offshore/info",
-    "method": "GET",
+    "url": "/v3_0/user/login",
+    "method": "POST",
     "code": 0
   },
   "projects": [
     "gp"
   ],
-  "serverHost": "http://localhost:3001"
+  "serverHost": "http://localhost:3002"
 }
