@@ -93,7 +93,7 @@ program
           name,
           host,
           status,
-          location,
+          regexlocation: location,
           regex
         }
       },
