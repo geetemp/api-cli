@@ -5,8 +5,6 @@
     "method": "POST",
     "code": 0
   },
-  "projects": [
-    "gp"
-  ],
+  "projects": [],
   "serverHost": "http://localhost:3002"
 }

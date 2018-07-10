@@ -20,11 +20,13 @@ app.use(
     target: host || setting.serverHost(),
     changeOrigin: true,
     onProxyRes: function(proxyRes, req, res) {
+      const warnEmptyArray = proxyRes.headers["warn-emptyarray"];
       const diff = proxyRes.headers["diff"];
-      if (diff) {
+      if (diff || warnEmptyArray) {
         console.log(chalk.bgGreen(req.url, req.method));
-        jsondiffpatch.console.log(JSON.parse(proxyRes.headers["diff"]));
-        console.log();
+        if (warnEmptyArray) console.log(chalk.red(warnEmptyArray));
+        if (diff)
+          jsondiffpatch.console.log(JSON.parse(proxyRes.headers["diff"]));
         console.log();
       }
     }
