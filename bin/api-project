@@ -47,12 +47,20 @@ program
   .command("add <project-name> <host>")
   .description("add a project")
   .option("-n, --name [name]", "project chinese name")
+  .option("-l, --location [location]", "project version location")
+  .option("-r, --regex [regex]", "project version regex")
   .action(function(projectName, host, cmd) {
     request(
       {
         url: `${serverHost}/projects`,
         method: "POST",
-        form: { identity: projectName, name: cmd.name, target: host }
+        form: {
+          identity: projectName,
+          name: cmd.name,
+          target: host,
+          regex: cmd.regex,
+          regexlocation: cmd.location
+        }
       },
       function(error, response, body) {
         if (error || response.statusCode !== 200) {
@@ -73,13 +81,22 @@ program
   .option("-n, --name [name]", "project chinese name")
   .option("-h, --host [host]", "project host")
   .option("-s, --status [status]", "project proxy open status")
+  .option("-l, --location [location]", "project version location")
+  .option("-r, --regex [regex]", "project version regex")
   .action(function(projectName, cmd) {
-    const { name, host, status } = cmd;
+    const { name, host, status, location, regex } = cmd;
     request(
       {
         url: `${serverHost}/projects`,
         method: "PUT",
-        form: { identity: projectName, name, host, status }
+        form: {
+          identity: projectName,
+          name,
+          host,
+          status,
+          location,
+          regex
+        }
       },
       function(error, response, body) {
         if (error || response.statusCode !== 200) {

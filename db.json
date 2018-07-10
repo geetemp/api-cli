@@ -3,7 +3,7 @@
   "interface": {
     "url": "/v3_0/offshore/info",
     "method": "GET",
-    "code": 0
+    "code": "0"
   },
   "projects": [
     "gp"
