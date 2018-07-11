@@ -1,13 +1,10 @@
 {
-  "workProject": "gp",
+  "workProject": "geetemp",
   "interface": {
-    "url": "/v5_0/profile/info",
+    "url": "/v3_0/profile/info",
     "method": "GET",
     "code": "0"
   },
-  "projects": [
-    "gp",
-    "career"
-  ],
-  "serverHost": "http://localhost:3001"
+  "projects": ["geetemp", "career"],
+  "serverHost": "http://localhost:3002"
 }
