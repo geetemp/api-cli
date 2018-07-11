@@ -5,13 +5,12 @@ const logger = require("../lib/logger");
 const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
 
-const serverHost = setting.serverHost();
-
 // 查找项目
 program
   .command("list [project-name]")
   .description("display project list")
   .action(function(projectName) {
+    const serverHost = setting.serverHost();
     const url = projectName
       ? `${serverHost}/projects?identity=${projectName}`
       : `${serverHost}/projects`;
@@ -49,6 +48,7 @@ program
   .option("-l, --location [location]", "project version location")
   .option("-r, --regex [regex]", "project version regex")
   .action(function(projectName, host, cmd) {
+    const serverHost = setting.serverHost();
     request(
       {
         url: `${serverHost}/projects`,
@@ -78,11 +78,12 @@ program
   .command("set <project-name>")
   .description("set product info")
   .option("-n, --name [name]", "project chinese name")
-  .option("-h, --host [host]", "project host")
+  .option("--host [host]", "project host")
   .option("-s, --status [status]", "project proxy open status")
   .option("-l, --location [location]", "project version location")
   .option("-r, --regex [regex]", "project version regex")
   .action(function(projectName, cmd) {
+    const serverHost = setting.serverHost();
     const { name, host, status, location, regex } = cmd;
     request(
       {

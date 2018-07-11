@@ -5,13 +5,13 @@ const logger = require("../lib/logger");
 const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
 const jsondiffpatch = require("jsondiffpatch");
-const serverHost = setting.serverHost();
 
 program
   .command("list [url] [method] [code]")
   .option("-d --desc", "include result desc")
-  .description("list result stack on someone interface")
+  .description("list results on someone interface")
   .action(function(url, method, code, cmd) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
@@ -50,8 +50,9 @@ program
   .command("head [url] [method] [code]")
   .option("-d --desc", "require include result desc")
   .option("-s --set <hash>", "set head to a new one")
-  .description("get head stack on someone interface")
+  .description("get head result on someone interface")
   .action(function(url, method, code, cmd) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
@@ -91,8 +92,9 @@ program
   .command("stable [url] [method] [code]")
   .option("-d --desc", "require include result desc")
   .option("-s --set <hash>", "set stable to a new one")
-  .description("get stable stack on someone interface")
+  .description("get stable result on someone interface")
   .action(function(url, method, code, cmd) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
@@ -130,8 +132,9 @@ program
 
 program
   .command("get <result-hash>")
-  .description("get result info based result-ish")
+  .description("get result info based result hash")
   .action(function(resultHash) {
+    const serverHost = setting.serverHost();
     request(
       {
         url: `${serverHost}/apis/stack/${resultHash}`
@@ -152,6 +155,7 @@ program
   .command("diff [new-hash] [old-hash] [code]")
   .description("Compare the differences between the two results")
   .action(function(newHash, oldHash, code) {
+    const serverHost = setting.serverHost();
     if (newHash && !oldHash) {
       logger.fatal("lack diff must params,please specify!");
     }
@@ -193,8 +197,9 @@ program
 
 program
   .command("merge [url] [method] [code]")
-  .description("merge result diff")
+  .description("merge result to newest")
   .action(function(url, method, code) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");

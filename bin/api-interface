@@ -5,14 +5,13 @@ const logger = require("../lib/logger");
 const setting = require("../lib/setting");
 const db = require("../lib/dbinit");
 
-const serverHost = setting.serverHost();
-
 program
   .command("list")
   .option("-u, --url [url]", "interface req url")
   .option("-m, --method [method]", "interface req method")
   .description("search interface list")
   .action(function(cmd) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
@@ -42,6 +41,7 @@ program
   .command("status [url] [method]")
   .description("query interface status")
   .action(function(url, method) {
+    const serverHost = setting.serverHost();
     const workProject = db.get("workProject").value();
     if (!workProject) {
       logger.fatal("current work project isn't setted, please go to set.");

@@ -1,12 +1,15 @@
 {
   "name": "api-cli",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "api cli tool",
-  "main": "index.js",
   "author": "common",
   "license": "MIT",
   "bin": {
-    "api": "bin/api"
+    "api": "bin/api",
+    "api-interface": "bin/api-interface",
+    "api-project": "bin/api-project",
+    "api-proxy": "bin/api-proxy",
+    "api-result": "bin/api-result"
   },
   "scripts": {
     "test": "jest"
