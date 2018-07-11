@@ -5,6 +5,8 @@
     "method": "GET",
     "code": "0"
   },
-  "projects": ["geetemp", "career"],
+  "projects": [
+    "geetemp"
+  ],
   "serverHost": "http://localhost:3002"
 }
