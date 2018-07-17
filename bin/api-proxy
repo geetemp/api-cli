@@ -6,6 +6,7 @@ const chalk = require("chalk");
 const setting = require("../lib/setting");
 const program = require("commander");
 const db = require("../lib/dbinit");
+const dufaultHost = require("../config");
 
 const app = express();
 program.usage("[server-host]").parse(process.argv);
@@ -17,7 +18,7 @@ if (host) {
 
 app.use(
   proxy({
-    target: host || setting.serverHost(),
+    target: host || setting.serverHost() || dufaultHost,
     changeOrigin: true,
     onProxyRes: function(proxyRes, req, res) {
       const warnEmptyArray = proxyRes.headers["warn-emptyarray"];

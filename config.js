@@ -1,3 +1,3 @@
 module.exports = {
-  host: "http://localhost:3001"
+  host: "http://monitor.api.com/"
 };

@@ -19,7 +19,7 @@ program
     if ((url && !method) || (url && method && !code)) {
       logger.fatal("which interface is queried ? please specify!");
     }
-    if (!url && Object.keys(workInterface).length === 0) {
+    if (!url && Object.keys(workInterface || {}).length === 0) {
       logger.fatal("which interface is queried ? please specify!");
     }
     const { desc } = cmd;
@@ -60,7 +60,7 @@ program
     if ((url && !method) || (url && method && !code)) {
       logger.fatal("which interface is queried ? please specify!");
     }
-    if (!url && Object.keys(workInterface).length === 0) {
+    if (!url && Object.keys(workInterface || {}).length === 0) {
       logger.fatal("which interface is queried ? please specify!");
     }
     const { desc, set } = cmd;
@@ -102,7 +102,7 @@ program
     if ((url && !method) || (url && method && !code)) {
       logger.fatal("which interface is queried ? please specify!");
     }
-    if (!url && Object.keys(workInterface).length === 0) {
+    if (!url && Object.keys(workInterface || {}).length === 0) {
       logger.fatal("which interface is queried ? please specify!");
     }
     const { desc, set } = cmd;
@@ -168,7 +168,7 @@ program
     if (!workProject)
       logger.fatal("current work project isn't setted, please go to set.");
     let workInterface = db.get("interface").value();
-    if (!newHash && Object.keys(workInterface).length === 0) {
+    if (!newHash && Object.keys(workInterface || {}).length === 0) {
       logger.fatal("which interface is queried ? please specify!");
     }
     request(
@@ -207,7 +207,7 @@ program
     if ((url && !method) || (url && method && !code)) {
       logger.fatal("which interface needs merge ? please specify!");
     }
-    if (!url && Object.keys(workInterface).length === 0) {
+    if (!url && Object.keys(workInterface || {}).length === 0) {
       logger.fatal("which interface needs merge ? please specify!");
     }
     request(
