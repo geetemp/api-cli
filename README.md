@@ -136,7 +136,7 @@ used project success.current work project:gp
 api interface use /v3_0/profile/info get
 
 // 反馈
-api-cli · used interface success. current work interface:{"url":"C:/Program F               iles/Git/v3_0/profile/info","method":"get","code":0}
+api-cli · used interface success. current work interface:{"url":"C:/Program Files/Git/v3_0/profile/info","method":"get","code":0}
 
 ```
 
