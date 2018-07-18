@@ -6,8 +6,7 @@ const chalk = require("chalk");
 const setting = require("../lib/setting");
 const program = require("commander");
 const db = require("../lib/dbinit");
-const dufaultHost = require("../config");
-
+const { dufaultHost } = require("../config");
 const app = express();
 program.usage("[server-host]").parse(process.argv);
 
