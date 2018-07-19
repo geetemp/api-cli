@@ -42,9 +42,9 @@ api-cli · { proxy: { target: 'www.geetemp.com', status: 1 }, // host
   __v: 0 }
 ```
 
-这个时候我发现host和版本号正则我写错了，需要修改，就来看`api-project set` 命令。
+这个时候我发现host和版本号正则我写错了，需要修改，就来看`api project set` 命令。
 
-`api-project set` 命令有一个必填参数为项目命令， 还有一些和add命令一样的选填参数，也就是说，除了项目名称不能修改以外，其它信息均可修改。那么现在我来使用以下命令修改这个上文中配错的信息。
+`api project set` 命令有一个必填参数为项目命令， 还有一些和add命令一样的选填参数，也就是说，除了项目名称不能修改以外，其它信息均可修改。那么现在我来使用以下命令修改这个上文中配错的信息。
 
 ```javascript
  api project set gp --host http:\\www.geetemp.com -r v[0-9]_[0-9] 
@@ -56,14 +56,14 @@ api-cli · { proxy: { target: 'www.geetemp.com', status: 1 }, // host
 
 ##### 开启监听
 
-使用`api proxy` 开启监听，开启成功，会打印监听端口号等信息。
+使用`api proxy` 开启监听，该接口接收一个 可选参数`host`，该host为api server 的 host ， 如果不配置则为默认host `http://monitor.api.com`, 一般情况下，不配置即可。若监听开启成功，会打印监听端口号等信息。
 
 ```javascript
 // 启动监听
- api proxy 
+ api proxy http://monitor.api.com
 
 // 监听结果
-Proxy created: /  ->  http://localhost:3002
+Proxy created: /  ->  http://monitor.api.com
 ```
 
 开启监听之后，你就可以愉快的请求接口了。
@@ -73,17 +73,17 @@ Proxy created: /  ->  http://localhost:3002
 在请求接口的时候，请求的服务端就是上文中开启监听的服务端host即`http://localhost:3002` 再服务端host和后端提供的接口地址之间需要加上上文配置的项目名称。入下所示：
 
 ```javascript
-// host 为 http://localhost:3002
+// host 为 http://monitor.api.com
 // 项目名称为 gp
 // 接口地址为 /v3_0/profile/info
-http://localhost:3002/gp/v3_0/profile/info?profile_id=18947
+http://monitor.api.com/gp/v3_0/profile/info?profile_id=18947
 ```
 
 ##### 接口内容改变
 
-如果在请求的过程中，接口的内容（包括字段或字段的数据类型）改变，则ci会打印出改变之前的内容及改变之后内容，你可根据当时的情况去和后端协调或者修改前端代码。
+如果在请求的过程中，接口的内容（包括字段或字段的数据类型）改变，则ci会打印出差异内容，你可根据当时的情况去和后端协调或者修改前端代码。
 
-如果改变为前后端双方均接受的改变，则前端需要使用`api-result merge` 命令，更新一下接口内容，防止下次请求到该接口时，ci还是认为接口数据改变了，仍然把结果打印出来。
+如果改变为前后端双方均接受的改变，则前端需要使用`api result merge` 命令，更新一下接口内容，防止下次请求到该接口时，ci还是认为接口数据改变了，仍然把结果打印出来。
 
 ##### 更新接口内容
 
@@ -117,6 +117,27 @@ api project use gp
 
 // 反馈 
 used project success.current work project:gp
+```
+
+##### 配置常用接口
+
+当然，你可以使用`api interface use` 命令配置一条最常用的接口，这样你在使用接口相关的命令的时候，就可以不用每次都要输入`url` 和 `method` 这两个参数了。改接口接收两个必填参数和一个选填参数，参数见下表：
+
+| 属性名 | 是否必填 | 默认值 | 简写 | 说明                      |
+| ------ | :------: | :----: | :--: | ------------------------- |
+| url    |    是    |   -    |  -   | 接口路径                  |
+| method |    是    |   -    |  -   | 接口的请求方式            |
+| code   |    否    |   -    |  -   | 接口的状态码,非http状态码 |
+
+如下命令所示，我将profile/info设置为常用接口
+
+```javascript
+// 命令
+api interface use /v3_0/profile/info get
+
+// 反馈
+api-cli · used interface success. current work interface:{"url":"C:/Program Files/Git/v3_0/profile/info","method":"get","code":0}
+
 ```
 
 ##### 更多命令
